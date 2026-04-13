@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syfex — Digital Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f5f0;
+    --gray: #1a1a1a;
+    --mid: #2e2e2e;
+    --light: #888;
+    --accent: #f5f5f0;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--white);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.1s ease;
+  }
+  .cursor-follower {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(245,245,240,0.4);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  .cursor-follower.hover {
+    width: 60px; height: 60px;
+    border-color: var(--white);
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--light); font-size: 14px; letter-spacing: 0.5px;
+    text-decoration: none; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--white); color: var(--black);
+    padding: 10px 24px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.5px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .nav-cta:hover { background: transparent; color: var(--white); border: 1px solid var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-line {
+    position: absolute; top: 0; bottom: 0;
+    width: 1px; background: rgba(255,255,255,0.04);
+  }
+  .hero-grid-line:nth-child(1) { left: 20%; }
+  .hero-grid-line:nth-child(2) { left: 40%; }
+  .hero-grid-line:nth-child(3) { left: 60%; }
+  .hero-grid-line:nth-child(4) { left: 80%; }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero-tag {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 16px; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--light); margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(56px, 9vw, 130px);
+    font-weight: 800; line-height: 0.92;
+    letter-spacing: -3px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-title span { color: transparent; -webkit-text-stroke: 1px var(--white); }
+  .hero-desc {
+    max-width: 440px; margin-top: 36px;
+    font-size: 16px; line-height: 1.7; color: var(--light);
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; margin-top: 48px;
+    opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  }
+  .btn-primary {
+    background: var(--white); color: var(--black);
+    padding: 16px 36px; font-size: 14px; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(255,255,255,0.15); }
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white); padding: 16px 36px; font-size: 14px;
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.04); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; right: 60px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 2px; color: var(--light);
+    text-transform: uppercase;
+    opacity: 0; animation: fadeUp 1s 1s forwards;
+  }
+  .scroll-line {
+    width: 40px; height: 1px; background: var(--light);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%; background: var(--white);
+    animation: slideLine 2s 1.5s infinite;
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 20px 0; overflow: hidden;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 32px;
+    padding: 0 32px; font-size: 12px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--light);
+  }
+  .marquee-dot { width: 4px; height: 4px; background: var(--light); border-radius: 50%; }
+
+  /* STATS */
+  .stats-section {
+    padding: 100px 60px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.06);
+  }
+  .stat-item {
+    background: var(--black);
+    padding: 50px 40px;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 56px; font-weight: 800;
+    line-height: 1; letter-spacing: -2px;
+  }
+  .stat-label { margin-top: 12px; font-size: 13px; color: var(--light); letter-spacing: 0.5px; }
+
+  /* SERVICES */
+  section { padding: 100px 60px; }
+  .section-header { margin-bottom: 70px; }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--light); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--light); }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
+  .service-card {
+    background: var(--black); padding: 48px 40px;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s, border-color 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--white);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { background: var(--gray); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num { font-size: 11px; letter-spacing: 2px; color: var(--light); margin-bottom: 30px; }
+  .service-icon { font-size: 28px; margin-bottom: 20px; }
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 700; margin-bottom: 14px;
+  }
+  .service-desc { font-size: 14px; line-height: 1.7; color: var(--light); }
+  .service-arrow {
+    margin-top: 30px; font-size: 20px; color: var(--light);
+    transition: color 0.3s, transform 0.3s;
+    display: inline-block;
+  }
+  .service-card:hover .service-arrow { color: var(--white); transform: translate(4px, -4px); }
+
+  /* PROJECTS */
+  .projects-section { padding: 100px 60px; }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 60px; }
+  .project-card {
+    position: relative; aspect-ratio: 4/3;
+    background: var(--gray); overflow: hidden;
+    cursor: none;
+  }
+  .project-card:nth-child(1) { aspect-ratio: 16/9; grid-column: span 2; }
+  .project-bg {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .project-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 36px; transition: background 0.4s;
+  }
+  .project-card:hover .project-overlay { background: rgba(0,0,0,0.6); }
+  .project-tag {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--light); margin-bottom: 10px;
+  }
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px; font-weight: 700;
+  }
+
+  .project-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px; opacity: 0.15;
+  }
+
+  /* WHY US */
+  .why-section { background: var(--gray); padding: 100px 60px; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 60px; }
+  .why-list { display: flex; flex-direction: column; gap: 0; }
+  .why-item {
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; gap: 20px; align-items: flex-start;
+    transition: padding-left 0.3s;
+    cursor: default;
+  }
+  .why-item:hover { padding-left: 12px; }
+  .why-num { font-size: 11px; color: var(--light); min-width: 30px; margin-top: 4px; }
+  .why-text h4 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .why-text p { font-size: 14px; color: var(--light); line-height: 1.6; }
+  .why-visual {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; background: rgba(255,255,255,0.08);
+    height: 460px;
+  }
+  .why-box {
+    background: var(--gray); display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    transition: background 0.3s;
+  }
+  .why-box:hover { background: var(--mid); }
+  .why-box-num { font-size: 48px; font-weight: 800; letter-spacing: -2px; }
+  .why-box-label { font-size: 11px; letter-spacing: 1px; color: var(--light); margin-top: 6px; text-align: center; }
+
+  /* PROCESS */
+  .process-section { padding: 100px 60px; }
+  .process-track {
+    display: flex; gap: 2px; background: rgba(255,255,255,0.06);
+    margin-top: 60px;
+  }
+  .process-step {
+    flex: 1; background: var(--black); padding: 48px 32px;
+    border-top: 2px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .process-step:hover { border-color: var(--white); background: var(--gray); }
+  .step-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: rgba(255,255,255,0.08); margin-bottom: 20px; }
+  .step-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+  .step-desc { font-size: 13px; color: var(--light); line-height: 1.6; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 100px 60px; background: var(--gray); }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(255,255,255,0.06); margin-top: 60px; }
+  .testi-card { background: var(--gray); padding: 40px; transition: background 0.3s; }
+  .testi-card:hover { background: var(--mid); }
+  .testi-stars { color: var(--white); font-size: 14px; margin-bottom: 20px; }
+  .testi-text { font-size: 15px; line-height: 1.7; color: var(--light); font-style: italic; margin-bottom: 24px; }
+  .testi-author { display: flex; align-items: center; gap: 14px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--mid); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; font-family: 'Syne', sans-serif;
+  }
+  .testi-name { font-weight: 500; font-size: 14px; }
+  .testi-role { font-size: 12px; color: var(--light); margin-top: 2px; }
+
+  /* PRICING */
+  .pricing-section { padding: 100px 60px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(255,255,255,0.06); margin-top: 60px; }
+  .plan-card {
+    background: var(--black); padding: 48px 36px;
+    position: relative; transition: background 0.3s;
+  }
+  .plan-card.featured { background: var(--white); color: var(--black); }
+  .plan-card:hover:not(.featured) { background: var(--gray); }
+  .plan-badge {
+    display: inline-block; background: var(--black); color: var(--white);
+    padding: 4px 12px; font-size: 10px; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--light); margin-bottom: 16px;
+  }
+  .plan-card.featured .plan-name { color: rgba(0,0,0,0.5); }
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px; font-weight: 800; letter-spacing: -2px; margin-bottom: 6px;
+  }
+  .plan-period { font-size: 13px; color: var(--light); margin-bottom: 36px; }
+  .plan-card.featured .plan-period { color: rgba(0,0,0,0.5); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .plan-features li { font-size: 14px; display: flex; gap: 10px; align-items: center; }
+  .plan-features li::before { content: '✓'; font-weight: 700; }
+  .plan-features li.no { opacity: 0.35; }
+  .plan-features li.no::before { content: '×'; }
+  .plan-btn {
+    display: block; text-align: center;
+    padding: 14px; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.5px; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .plan-btn-dark { border: 1px solid rgba(255,255,255,0.2); color: var(--white); }
+  .plan-btn-dark:hover { background: var(--white); color: var(--black); }
+  .plan-btn-light { background: var(--black); color: var(--white); }
+  .plan-btn-light:hover { background: var(--gray); }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 120px 60px; text-align: center;
+    background: var(--white); color: var(--black);
+    position: relative; overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(80px, 20vw, 260px);
+    font-weight: 800; color: rgba(0,0,0,0.04);
+    white-space: nowrap; pointer-events: none;
+  }
+  .cta-section .section-title { color: var(--black); }
+  .cta-section .section-label { color: rgba(0,0,0,0.4); }
+  .cta-section .section-label::before { background: rgba(0,0,0,0.4); }
+  .cta-desc { font-size: 18px; color: rgba(0,0,0,0.6); margin-top: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .cta-form { display: flex; gap: 0; max-width: 500px; margin: 48px auto 0; }
+  .cta-form-full { max-width: 520px; margin: 40px auto 0; display: flex; flex-direction: column; gap: 10px; }
+  .cta-row { display: flex; gap: 10px; }
+  .cta-textarea { resize: vertical; min-height: 100px; font-family: 'DM Sans', sans-serif; }
+  .cta-input {
+    flex: 1; padding: 16px 20px;
+    border: 1px solid rgba(0,0,0,0.15); border-right: none;
+    font-size: 14px; outline: none;
+    font-family: 'DM Sans', sans-serif; background: transparent;
+  }
+  .cta-input:focus { border-color: var(--black); }
+  .cta-submit {
+    background: var(--black); color: var(--white);
+    padding: 16px 28px; border: none; cursor: none;
+    font-size: 14px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif; letter-spacing: 0.5px;
+    transition: background 0.3s;
+  }
+  .cta-submit:hover { background: var(--gray); }
+
+  /* OWNER CARD */
+  .owner-section { padding: 100px 60px; }
+  .owner-card {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden; position: relative;
+  }
+  .owner-left { padding: 70px 60px; }
+  .owner-tag {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--light); margin-bottom: 32px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .owner-tag::before { content: ''; width: 20px; height: 1px; background: var(--light); }
+  .owner-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px; margin-bottom: 8px;
+  }
+  .owner-title { font-size: 14px; color: var(--light); margin-bottom: 32px; }
+  .owner-bio { font-size: 15px; line-height: 1.8; color: var(--light); max-width: 420px; margin-bottom: 40px; }
+  .owner-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
+  .skill-tag {
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 16px; font-size: 11px;
+    letter-spacing: 0.5px; color: var(--light);
+  }
+  .owner-socials { display: flex; gap: 16px; }
+  .social-link {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--light); text-decoration: none; font-size: 16px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .social-link:hover { background: var(--white); color: var(--black); }
+  .owner-right {
+    background: var(--gray); position: relative;
+    display: flex; flex-direction: column; justify-content: center;
+    align-items: center; padding: 60px;
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .owner-avatar-wrap {
+    width: 180px; height: 180px; position: relative; margin-bottom: 32px;
+  }
+  .owner-avatar {
+    width: 180px; height: 180px; border-radius: 50%;
+    background: linear-gradient(135deg, #2e2e2e, #1a1a1a);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .owner-ring {
+    position: absolute; inset: -12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    animation: spin 12s linear infinite;
+  }
+  .owner-ring::before {
+    content: ''; position: absolute;
+    top: -3px; left: 50%; transform: translateX(-50%);
+    width: 6px; height: 6px;
+    background: var(--white); border-radius: 50%;
+  }
+  .owner-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 100%; background: rgba(255,255,255,0.06); }
+  .owner-stat {
+    background: var(--gray); padding: 24px;
+    text-align: center;
+  }
+  .owner-stat-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
+  .owner-stat-label { font-size: 11px; color: var(--light); margin-top: 4px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 60px 60px 40px;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+  .footer-brand { max-width: 280px; }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px; font-weight: 800; margin-bottom: 16px;
+  }
+  .footer-tagline { font-size: 13px; color: var(--light); line-height: 1.6; }
+  .footer-col h5 {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--light); margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col a { font-size: 14px; color: var(--light); text-decoration: none; transition: color 0.3s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-copy { font-size: 12px; color: var(--light); }
+  .footer-admin-link {
+    font-size: 12px; color: var(--light); text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.1); padding: 6px 16px;
+    transition: all 0.3s; letter-spacing: 0.5px;
+  }
+  .footer-admin-link:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slideLine {
+    from { left: -100%; }
+    to { left: 100%; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section, .projects-section, .owner-section, .pricing-section, .process-section, .testimonials, .why-section { padding: 70px 24px; }
+    .stats-section { grid-template-columns: 1fr 1fr; padding: 0; }
+    .services-grid, .testi-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:nth-child(1) { grid-column: span 1; }
+    .why-grid { grid-template-columns: 1fr; }
+    .owner-card { grid-template-columns: 1fr; }
+    .owner-right { padding: 40px 24px; }
+    .owner-left { padding: 40px 24px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+    .process-track { flex-direction: column; }
+    .cta-form { flex-direction: column; }
+    .cta-input { border-right: 1px solid rgba(0,0,0,0.15); }
+    .hero-scroll { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Syfex</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-line"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Digital Agency — Est. 2026</div>
+    <h1 class="hero-title">We Build<br><span>Digital</span><br>Experiences</h1>
+    <p class="hero-desc">Syfex creates stunning websites, apps, and digital solutions that help businesses grow. From concept to launch — we deliver excellence.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Our Work</a>
+      <a href="#contact" class="btn-secondary">Start a Project</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll Down
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item">Web Design <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Development <span class="marquee-dot"></span></div>
+    <div class="marquee-item">UI/UX Design <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Mobile Apps <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Branding <span class="marquee-dot"></span></div>
+    <div class="marquee-item">E-Commerce <span class="marquee-dot"></span></div>
+    <div class="marquee-item">SEO & Marketing <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Web Design <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Development <span class="marquee-dot"></span></div>
+    <div class="marquee-item">UI/UX Design <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Mobile Apps <span class="marquee-dot"></span></div>
+    <div class="marquee-item">Branding <span class="marquee-dot"></span></div>
+    <div class="marquee-item">E-Commerce <span class="marquee-dot"></span></div>
+    <div class="marquee-item">SEO & Marketing <span class="marquee-dot"></span></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section reveal">
+  <div class="stat-item">
+    <div class="stat-num" data-count="120">0</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-count="98">0</div>
+    <div class="stat-label">Happy Clients (%)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-count="3">0</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-count="15">0</div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Services We<br>Offer</h2>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-icon">◻</div>
+      <div class="service-name">Web Design</div>
+      <div class="service-desc">Pixel-perfect, responsive websites that look stunning on every device. We design with purpose.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-icon">⬡</div>
+      <div class="service-name">Web Development</div>
+      <div class="service-desc">Fast, scalable, and secure websites built with modern technologies and best practices.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-icon">◈</div>
+      <div class="service-name">UI/UX Design</div>
+      <div class="service-desc">User-centered design that converts visitors into customers through intuitive experiences.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-icon">◉</div>
+      <div class="service-name">Mobile Apps</div>
+      <div class="service-desc">Native and cross-platform mobile applications for iOS and Android with smooth UX.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-icon">◊</div>
+      <div class="service-name">E-Commerce</div>
+      <div class="service-desc">High-converting online stores with seamless checkout flows and powerful integrations.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <div class="service-icon">▣</div>
+      <div class="service-name">Brand Identity</div>
+      <div class="service-desc">Complete branding packages — logo, colors, typography, and brand guidelines.</div>
+      <div class="service-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-header reveal">
+    <div class="section-label">Our Work</div>
+    <h2 class="section-title">Featured<br>Projects</h2>
+  </div>
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="project-placeholder" style="background: linear-gradient(135deg,#1a1a1a,#2e2e2e); height:100%; display:flex; align-items:center; justify-content:center; font-size:80px; opacity:0.3;">◻</div>
+      <div class="project-overlay">
+        <div class="project-tag">Web Design + Development</div>
+        <div class="project-title">LuxeCommerce Platform</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div style="background: linear-gradient(135deg,#111,#1e1e1e); height:100%; display:flex; align-items:center; justify-content:center; font-size:60px; opacity:0.3;">⬡</div>
+      <div class="project-overlay">
+        <div class="project-tag">UI/UX + Branding</div>
+        <div class="project-title">Nexara Finance App</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div style="background: linear-gradient(135deg,#181818,#252525); height:100%; display:flex; align-items:center; justify-content:center; font-size:60px; opacity:0.3;">◈</div>
+      <div class="project-overlay">
+        <div class="project-tag">Mobile + Web</div>
+        <div class="project-title">Zenith SaaS Dashboard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section" id="about">
+  <div class="why-grid">
+    <div>
+      <div class="section-label reveal">Why Choose Us</div>
+      <h2 class="section-title reveal">Built Different,<br>Delivers More</h2>
+      <div class="why-list reveal">
+        <div class="why-item">
+          <div class="why-num">01</div>
+          <div class="why-text">
+            <h4>Strategy-First Approach</h4>
+            <p>We understand your business before writing a single line of code.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-num">02</div>
+          <div class="why-text">
+            <h4>Clean, Fast Code</h4>
+            <p>Our sites load in under 2 seconds and score 95+ on Google PageSpeed.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-num">03</div>
+          <div class="why-text">
+            <h4>On-Time Delivery</h4>
+            <p>100% of projects delivered on time. We respect your deadlines.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-num">04</div>
+          <div class="why-text">
+            <h4>Lifetime Support</h4>
+            <p>We don't disappear after launch. Ongoing support is always available.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual reveal">
+      <div class="why-box">
+        <div class="why-box-num">2s</div>
+        <div class="why-box-label">Avg Load Time</div>
+      </div>
+      <div class="why-box">
+        <div class="why-box-num">95+</div>
+        <div class="why-box-label">PageSpeed Score</div>
+      </div>
+      <div class="why-box">
+        <div class="why-box-num">∞</div>
+        <div class="why-box-label">Support</div>
+      </div>
+      <div class="why-box">
+        <div class="why-box-num">7d</div>
+        <div class="why-box-label">Avg Turnaround</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="section-header reveal">
+    <div class="section-label">How We Work</div>
+    <h2 class="section-title">Our Process</h2>
+  </div>
+  <div class="process-track reveal">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-name">Discovery</div>
+      <div class="step-desc">We learn about your goals, audience, and vision through a detailed consultation call.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-name">Strategy</div>
+      <div class="step-desc">We craft a project roadmap, wireframes, and design direction for your approval.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-name">Design</div>
+      <div class="step-desc">High-fidelity UI designs with your branding, refined until you love it.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-name">Develop</div>
+      <div class="step-desc">We build with clean, optimized code — fast, accessible, and scalable.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">05</div>
+      <div class="step-name">Launch</div>
+      <div class="step-desc">Testing, deployment, and handoff — with full training and documentation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header reveal">
+    <div class="section-label">Client Reviews</div>
+    <h2 class="section-title">What Clients<br>Say</h2>
+  </div>
+  <div class="testi-grid reveal">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Syfex completely transformed our online presence. The website they built is stunning and our conversions went up 40% in the first month."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">R</div>
+        <div>
+          <div class="testi-name">Rahul Sharma</div>
+          <div class="testi-role">CEO, TechNova India</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Professional, on-time, and the quality was beyond what I expected. I've worked with 5 agencies before — Syfex is in a different league."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">P</div>
+        <div>
+          <div class="testi-name">Priya Mehta</div>
+          <div class="testi-role">Founder, Bloom Studio</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The e-commerce site they built for us handles 10,000+ orders a month without a hitch. Incredible work and great communication throughout."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div>
+          <div class="testi-name">Amit Patel</div>
+          <div class="testi-role">Director, QuickCart</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-header reveal">
+    <div class="section-label">Pricing Plans</div>
+    <h2 class="section-title">Transparent<br>Pricing</h2>
+  </div>
+  <div class="pricing-grid reveal">
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">₹9K</div>
+      <div class="plan-period">One-time payment</div>
+      <ul class="plan-features">
+        <li>Landing Page (5 sections)</li>
+        <li>Mobile Responsive</li>
+        <li>Contact Form</li>
+        <li>Basic SEO Setup</li>
+        <li class="no">E-Commerce</li>
+        <li class="no">Admin Panel</li>
+        <li class="no">Custom Animations</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-dark">Get Started</a>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price">₹25K</div>
+      <div class="plan-period">One-time payment</div>
+      <ul class="plan-features">
+        <li>Full Website (10+ pages)</li>
+        <li>Mobile Responsive</li>
+        <li>Contact Form + CRM</li>
+        <li>Advanced SEO</li>
+        <li>Admin Dashboard</li>
+        <li>Custom Animations</li>
+        <li>1 Month Free Support</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-light">Get Started</a>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price">Custom</div>
+      <div class="plan-period">Project-based</div>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>E-Commerce Store</li>
+        <li>Mobile App (iOS + Android)</li>
+        <li>Payment Gateway</li>
+        <li>Custom API Integration</li>
+        <li>Dedicated Support</li>
+        <li>6 Months Maintenance</li>
+      </ul>
+      <a href="#contact" class="plan-btn plan-btn-dark">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-bg-text">SYFEX</div>
+  <div style="position:relative; z-index:2;">
+    <div class="section-label" style="justify-content:center;">Start Today</div>
+    <h2 class="section-title" style="font-size: clamp(36px,6vw,80px); letter-spacing:-2px;">Ready to Build<br>Something Great?</h2>
+    <p class="cta-desc">Fill the form below and we'll reach out within 24 hours to discuss your project.</p>
+    <div class="cta-form-full">
+      <div class="cta-row">
+        <input type="text" class="cta-input" id="ctaName" placeholder="Your Name" />
+        <input type="email" class="cta-input" id="ctaEmail" placeholder="your@email.com" />
+      </div>
+      <textarea class="cta-input cta-textarea" id="ctaMessage" placeholder="Tell us about your project..."></textarea>
+      <button class="cta-submit" id="ctaBtn" onclick="sendEmail()">Let's Talk →</button>
+    </div>
+    <div id="ctaSuccess" style="display:none; margin-top:20px; font-size:14px; color:#1a1a1a; background:rgba(0,0,0,0.08); padding:14px 24px; border:1px solid rgba(0,0,0,0.12); max-width:520px; margin-left:auto; margin-right:auto;">
+      ✓ Message sent! We'll get back to you within 24 hours.
+    </div>
+    <div id="ctaError" style="display:none; margin-top:20px; font-size:14px; color:#cc0000; background:rgba(200,0,0,0.05); padding:14px 24px; border:1px solid rgba(200,0,0,0.15); max-width:520px; margin-left:auto; margin-right:auto;">
+      ✗ Something went wrong. Please email us directly at hello@syfex.dev
+    </div>
+  </div>
+</section>
+
+<!-- OWNER CARD -->
+<section class="owner-section">
+  <div class="section-header reveal">
+    <div class="section-label">The Person Behind It</div>
+    <h2 class="section-title">Meet the<br>Founder</h2>
+  </div>
+  <div class="owner-card reveal">
+    <div class="owner-left">
+      <div class="owner-tag">Founder & Lead Developer</div>
+      <h3 class="owner-name">Syfex<br>Studios</h3>
+      <div class="owner-title">Full-Stack Developer & UI/UX Designer</div>
+      <p class="owner-bio">Passionate about building digital products that make a real difference. With 3+ years of hands-on experience crafting websites and apps, I bring both technical precision and creative vision to every project. Based in India, working globally.</p>
+      <div class="owner-skills">
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Next.js</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Tailwind</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">WordPress</span>
+      </div>
+      <div class="owner-socials">
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">gh</a>
+        <a href="mailto:hello@syfex.dev" class="social-link">@</a>
+      </div>
+    </div>
+    <div class="owner-right">
+      <div class="owner-avatar-wrap">
+        <div class="owner-avatar">S</div>
+        <div class="owner-ring"></div>
+      </div>
+      <div class="owner-stats">
+        <div class="owner-stat">
+          <div class="owner-stat-num">120+</div>
+          <div class="owner-stat-label">Projects</div>
+        </div>
+        <div class="owner-stat">
+          <div class="owner-stat-num">3yr</div>
+          <div class="owner-stat-label">Experience</div>
+        </div>
+        <div class="owner-stat">
+          <div class="owner-stat-num">98%</div>
+          <div class="owner-stat-label">Satisfaction</div>
+        </div>
+        <div class="owner-stat">
+          <div class="owner-stat-num">∞</div>
+          <div class="owner-stat-label">Passion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Syfex</div>
+      <p class="footer-tagline">Building digital experiences that matter. From startups to enterprises — we deliver websites that work.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#">Web Design</a></li>
+        <li><a href="#">Development</a></li>
+        <li><a href="#">UI/UX Design</a></li>
+        <li><a href="#">Mobile Apps</a></li>
+        <li><a href="#">Branding</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Process</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:hello@syfex.dev">hello@syfex.dev</a></li>
+        <li><a href="tel:+919999999999">+91 99999 99999</a></li>
+        <li><a href="#">Panipat, Haryana</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Syfex. All rights reserved.</div>
+    <a href="admin.html" class="footer-admin-link">Admin Panel →</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('follower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  function animateFollower() {
+    fx += (mx - fx) * 0.12;
+    fy += (my - fy) * 0.12;
+    follower.style.transform = `translate(${fx - 18}px, ${fy - 18}px)`;
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+  document.querySelectorAll('a, button, .service-card, .plan-card, .why-item').forEach(el => {
+    el.addEventListener('mouseenter', () => follower.classList.add('hover'));
+    el.addEventListener('mouseleave', () => follower.classList.remove('hover'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Counter animation
+  function animateCounter(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1800;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const statNums = document.querySelectorAll('[data-count]');
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const val = parseInt(el.dataset.count);
+        const suffix = el.closest('.stat-item')?.querySelector('.stat-label')?.textContent.includes('%') ? '+' : '+';
+        animateCounter(el, val);
+        statObs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(el => statObs.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.background = window.scrollY > 50 ? 'rgba(10,10,10,0.95)' : 'transparent';
+  });
+
+  // ============================================
+  // EMAILJS SETUP — Apni IDs yahan daalo
+  // ============================================
+  const EMAILJS_PUBLIC_KEY  = 'bbQBxS8yfB7_eTAeE';      // Account > API Keys
+  const EMAILJS_SERVICE_ID  = 'service_qb0lekv';      // Email Services
+  const EMAILJS_TEMPLATE_ID = 'template_hu1w5ao';     // Email Templates
+  // ============================================
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  async function sendEmail() {
+    const name    = document.getElementById('ctaName').value.trim();
+    const email   = document.getElementById('ctaEmail').value.trim();
+    const message = document.getElementById('ctaMessage').value.trim();
+    const btn     = document.getElementById('ctaBtn');
+    const success = document.getElementById('ctaSuccess');
+    const error   = document.getElementById('ctaError');
+
+    // Validation
+    if (!name || !email || !message) {
+      error.textContent = '✗ Please fill in all fields before submitting.';
+      error.style.display = 'block';
+      success.style.display = 'none';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      error.textContent = '✗ Please enter a valid email address.';
+      error.style.display = 'block';
+      success.style.display = 'none';
+      return;
+    }
+
+    // Loading state
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    success.style.display = 'none';
+    error.style.display = 'none';
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:  name,
+        from_email: email,
+        message:    message,
+        to_name:    'Syfex Team',
+        reply_to:   email,
+      });
+
+      // Success
+      success.style.display = 'block';
+      document.getElementById('ctaName').value = '';
+      document.getElementById('ctaEmail').value = '';
+      document.getElementById('ctaMessage').value = '';
+
+    } catch (err) {
+      console.error('EmailJS Error:', err);
+      error.textContent = '✗ Something went wrong. Please email us directly at hello@syfex.dev';
+      error.style.display = 'block';
+    }
+
+    // Reset button
+    btn.textContent = "Let's Talk →";
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+</script>
+</body>
+</html>
